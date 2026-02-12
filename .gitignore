@@ -1,11 +1,8 @@
-# Ambiente virtual
 konohaOracle/
 venv/
 env/
 
-# Variáveis sensíveis
 .env
 
-# Python
 __pycache__/
 *.pyc
