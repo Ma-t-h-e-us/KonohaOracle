@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import mysql.connector
 
-
 load_dotenv()
 
 with open("./Protocolos/protocolo.json", "r", encoding="utf-8") as f:
@@ -39,8 +38,7 @@ pergunta_usuario = input("Faça sua pergunta: ")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 system_prompt = f"""
-Você é um chatbot chamado Konoha Oracle, que realiza consultas SQL em um 
-banco de dados (MySql) próprio para responder as perguntas.
+Você é um chatbot chamado Konoha Oracle.
 
 Siga rigorosamente o protocolo abaixo:
 
@@ -91,12 +89,10 @@ def validate_query(query: str) -> bool:
         return False
     if "--" in q or "/*" in q:
         return False
-    if "INFORMATION_SCHEMA" in q:
-        return False
     return True
 
 if not validate_query(query_gerada):
-    print("\n❌ Query bloqueada pelo protocolo de segurança.")
+    print("\n Query bloqueada pelo protocolo de segurança.")
     exit()
 
 try :
@@ -113,7 +109,7 @@ try :
     cursor.execute(query_gerada)
     resultado = cursor.fetchall()
 
-    print(resultado)
+    # print(resultado)
 
     cursor.close()
     conn.close()
@@ -121,3 +117,36 @@ try :
 except Exception as e:
     print("\nErro ao executar query:")
     print(e)
+
+if not resultado:
+    print("Não encontrei informações no banco.")
+else:
+    natural_prompt = f"""
+    Você é o Konoha Oracle.
+
+    Baseado exclusivamente nos dados abaixo retornados do banco,
+    que segue essa estrutura {colunas},
+    responda a pergunta do usuário em linguagem natural.
+
+    Pergunta original:
+    {pergunta_usuario}
+
+    Dados retornados:
+    {resultado}
+
+    Responda de forma clara, organizada e como um verdadeiro oráculo ninja.
+    """
+
+    natural_response = client.chat.completions.create(
+        model="gpt-4.1",
+        messages=[
+            {"role": "system", "content": "Você é o Konoha Oracle. Responda de forma seria e objetiva"},
+            {"role": "user", "content": natural_prompt}
+        ],
+        temperature=0.2,
+        max_tokens=300
+    )
+
+    resposta_final = natural_response.choices[0].message.content
+    print("\n🧠 Resposta do Konoha Oracle\n")
+    print(resposta_final)

@@ -1,4 +1,21 @@
-from ..databaseConfig import cursor, conn
+from DataBase.databaseConfig import cursor, conn
+
+cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+
+cursor.execute("TRUNCATE TABLE PersonagensElementos")
+cursor.execute("TRUNCATE TABLE PersonagensJutsus")
+cursor.execute("TRUNCATE TABLE Jutsus")
+cursor.execute("TRUNCATE TABLE Personagens")
+cursor.execute("TRUNCATE TABLE Elementos")
+cursor.execute("TRUNCATE TABLE TiposElementos")
+cursor.execute("TRUNCATE TABLE TiposJutsu")
+cursor.execute("TRUNCATE TABLE Ocupacoes")
+cursor.execute("TRUNCATE TABLE Vilas")
+cursor.execute("TRUNCATE TABLE Arcos")
+cursor.execute("TRUNCATE TABLE Clas")
+cursor.execute("TRUNCATE TABLE TipoPersonagens")
+
+cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
 
 cursor.execute("""
 INSERT INTO TipoPersonagens (Relevancia) VALUES
@@ -15,7 +32,17 @@ INSERT INTO Clas (Nome, Descricao) VALUES
 ('Uzumaki', 'Clã conhecido por sua enorme vitalidade, grande reserva de chakra e domínio avançado de técnicas de selamento.'),
 ('Hatake', 'Clã respeitado de Konoha, famoso por ninjas habilidosos e estrategistas, como o lendário Kakashi.'),
 ('Uchiha', 'Clã poderoso descendente de Indra, portador do Sharingan e conhecido por seu talento excepcional em combate.'),
-('Haruno', 'Clã de origem civil em Konoha, representado por membros de grande inteligência e controle preciso de chakra.')
+('Haruno', 'Clã de origem civil em Konoha, representado por membros de grande inteligência e controle preciso de chakra.'),
+('Senju', 'Clã lendário rival dos Uchiha, conhecido por sua vitalidade e liderança.'),
+('Hyuga', 'Clã portador do Byakugan, especializado em combate corpo a corpo e controle de chakra.'),
+('Sarutobi', 'Clã tradicional de Konoha, conhecido por sua versatilidade e lealdade.'),
+('Nara', 'Clã estrategista especializado em técnicas de manipulação de sombras.'),
+('Akimichi', 'Clã que utiliza técnicas de expansão corporal baseadas em calorias.'),
+('Yamanaka', 'Clã especializado em técnicas mentais e transferência de consciência.'),
+('Aburame', 'Clã que utiliza insetos como arma em combate.'),
+('Inuzuka', 'Clã que luta em parceria com cães ninjas.'),
+('Namikaze', 'Clã conhecido por grande velocidade e talento natural.'),
+('Hoshigake', 'Clã da Névoa associado a grandes reservas de chakra e habilidades aquáticas.');
 """)
 
 cursor.execute("""
@@ -25,7 +52,21 @@ INSERT INTO Arcos (Nome, Descricao) VALUES
 ('Exame Chunin', 'Competição entre vilas para promoção de ninjas, marcada por lutas intensas e invasão surpresa.'),
 ('Ataque a Vila da Folha', 'Invasão liderada por Orochimaru durante o Exame Chunin, resultando na morte do Terceiro Hokage.'),
 ('Busca por Tsunade', 'Naruto e Jiraiya procuram Tsunade para assumir o posto de Quinta Hokage.'),
-('Missao de Recuperacao de Sasuke', 'Equipe formada para impedir que Sasuke abandone Konoha e se una a Orochimaru.')
+('Missao de Recuperacao de Sasuke', 'Equipe formada para impedir que Sasuke abandone Konoha e se una a Orochimaru.'),
+('Missao de Resgate do Kazekage', 'Akatsuki sequestra Gaara e o Time 7 parte para resgata-lo.'),
+('Missao de Reconhecimento na Ponte Tenchi', 'Time Kakashi enfrenta Orochimaru e reencontra Sasuke.'),
+('Missao de Supressao da Akatsuki', 'Shikamaru lidera equipe contra Hidan e Kakuzu.'),
+('Missao de Busca por Itachi', 'Equipe formada para localizar Itachi Uchiha.'),
+('Missao de Captura de Tres Caudas', 'Akatsuki tenta capturar o Sanbi.'),
+('Perseguicao de Itachi', 'Sasuke rastreia Itachi para confronto final.'),
+('Historia de Jiraiya, o Destemido', 'Jiraiya invade a vila da chuva para investigar Pain.'),
+('Batalha Fadidica entre Irmaos', 'Confronto final entre Sasuke e Itachi.'),
+('Invasao de Pain', 'Pain ataca Konoha em busca de Naruto.'),
+('Cupula dos Cinco Kage', 'Reuniao das cinco grandes vilas ninja.'),
+('Quarta Grande Guerra Ninja: Preparativos', 'Alianca Shinobi se organiza para guerra.'),
+('Quarta Grande Guerra Ninja: Confronto', 'Grandes batalhas contra exercito de Zetsu e Edo Tensei'),
+('Quarta Grande Guerra Ninja: Climax', 'Madara e Obito revelam plano final.'),
+('Kaguya Otsutsuki e o Fim da Guerra', 'Naruto e Sasuke enfrentam Kaguya e encerram o conflito.');
 """)
 
 cursor.execute("""
@@ -34,7 +75,11 @@ INSERT INTO Vilas (Nome, Pais) VALUES
 ('Vila Oculta da Areia', 'Vento'),
 ('Vila Oculta da Nevoa', 'Agua'),
 ('Vila Oculta da Nuvem', 'Relampago'),
-('Vila Oculta da Pedra', 'Terra')
+('Vila Oculta da Pedra', 'Terra'),
+('Vila do Ferro', 'Ferro'),
+('Vila do Som', 'Som'),
+('Vila da Chuva', 'Chuva'),
+('Vila da Grama', 'Grama');
 """)
 
 cursor.execute("""
