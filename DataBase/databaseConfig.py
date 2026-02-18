@@ -1,25 +1,23 @@
-#importacao de biblitecas
-
-import mysql.connector
-from mysql.connector import Error
+# importacao de bibliotecas
+import psycopg2
+from psycopg2 import OperationalError
 import os
 from dotenv import load_dotenv
 
-#criacao conexao direta com o bd mysql
-
+# criacao conexao direta com o bd postgresql
 load_dotenv()
 
 try:
-    conn = mysql.connector.connect(
-        host=str(os.getenv("host")),
-        user=str(os.getenv("user")),
-        port = int(os.getenv("port")),
-        password=str(os.getenv("password")),
-        database=str(os.getenv("database"))
+    conn = psycopg2.connect(
+        host=os.getenv("host"),
+        user=os.getenv("user"),
+        port=int(os.getenv("port")),
+        password=os.getenv("password"),
+        dbname=os.getenv("database") 
     )
 
-    if conn.is_connected():
-        cursor = conn.cursor()
+    cursor = conn.cursor()
+    print("Conectado ao PostgreSQL com sucesso!")
 
-except Error as e:
+except OperationalError as e:
     print("Erro ao conectar:", e)

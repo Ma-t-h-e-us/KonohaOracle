@@ -1,32 +1,44 @@
 from ..databaseConfig import cursor, conn
 
-#Criação de tabelas do bd
+cursor.execute("""
+DROP TABLE IF EXISTS 
+PersonagensAtributosDatabook,
+PersonagensHabilidades,
+Habilidades,
+Databooks,
+PersonagensElementos,
+PersonagensJutsus,
+Jutsus,
+Personagens,
+Elementos,
+TiposJutsu,
+TiposElementos,
+Ocupacoes,
+Vilas,
+Arcos,
+Clas,
+TipoPersonagens
+CASCADE;
+""")
+
 cursor.execute('''
 CREATE TABLE TipoPersonagens (
-    IdTipoPersonagem INT AUTO_INCREMENT PRIMARY KEY,
+    IdTipoPersonagem INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Relevancia VARCHAR(20) NOT NULL
-        CHECK (Relevancia IN (
-            'Protagonista',
-            'Deutragonista',
-            'Antagonista',
-            'Principais',
-            'Secundarios',
-            'Terciario'
-        ))
 )
 ''')
 
 cursor.execute('''
 CREATE TABLE Clas (
-    IdCla INT AUTO_INCREMENT PRIMARY KEY,
+    IdCla INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Nome VARCHAR(100) NOT NULL,
-    Descricao VARCHAR(150)
-)    
+    Descricao VARCHAR(200)
+)
 ''')
 
 cursor.execute('''
 CREATE TABLE Arcos (
-    IdArco INT AUTO_INCREMENT PRIMARY KEY,
+    IdArco INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Nome VARCHAR(100) NOT NULL,
     Descricao VARCHAR(200)
 )
@@ -34,66 +46,48 @@ CREATE TABLE Arcos (
 
 cursor.execute('''
 CREATE TABLE Vilas (
-    IdVila INT AUTO_INCREMENT PRIMARY KEY,
+    IdVila INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Nome VARCHAR(100) NOT NULL,
     Pais VARCHAR(20) NOT NULL
-        CHECK (Pais IN (
-            'Fogo','Terra','Agua','Vento','Relampago',
-            'Ferro','Som','Chuva','Grama'
-        ))
 )
 ''')
 
 cursor.execute('''
 CREATE TABLE Ocupacoes (
-    IdOcupacao INT AUTO_INCREMENT PRIMARY KEY,
+    IdOcupacao INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Nome VARCHAR(30) NOT NULL
-        CHECK (Nome IN (
-            'Genin','Chunin','Jounin','Jounin especial',
-            'Hokage','Kazekage','Mizukage','Raikage',
-            'Tsuchikage','Civil','Animal'
-        ))
 )
 ''')
 
 cursor.execute('''
 CREATE TABLE TiposElementos (
-    IdTiposElementos INT AUTO_INCREMENT PRIMARY KEY,
+    IdTiposElementos INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Nome VARCHAR(50) NOT NULL
 )
 ''')
 
 cursor.execute('''
 CREATE TABLE TiposJutsu (
-    IdTipoJutsu INT AUTO_INCREMENT PRIMARY KEY,
+    IdTipoJutsu INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Nome VARCHAR(30) NOT NULL
-        CHECK (Nome IN (
-            'Taijutsu','Genjutsu','Ninjutsu',
-            'Fuuinjutsu','Ninjutsu Medico',
-            'Kinjutsu','Nenhum'
-        ))
 )
 ''')
 
 cursor.execute('''
 CREATE TABLE Elementos (
-    IdElemento INT AUTO_INCREMENT PRIMARY KEY,
+    IdElemento INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     IdTiposElementos INT,
-    Nome VARCHAR(30) NOT NULL
-        CHECK (Nome IN (
-            'Fogo','Agua','Terra','Relampago','Vento',
-            'Yin-Yang','Nenhum','Gelo','Poeira',
-            'Explosao','Lava','Vapor'
-        )),
+    Nome VARCHAR(30) NOT NULL,
     CONSTRAINT fk_elemento_tipo
         FOREIGN KEY (IdTiposElementos)
         REFERENCES TiposElementos (IdTiposElementos)
+        ON DELETE SET NULL
 )
 ''')
 
 cursor.execute('''
 CREATE TABLE Personagens (
-    IdPersonagem INT AUTO_INCREMENT PRIMARY KEY,
+    IdPersonagem INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     IdTipoPersonagem INT NOT NULL,
     IdCla INT,
     IdArcoAparicao INT NOT NULL,
@@ -103,74 +97,69 @@ CREATE TABLE Personagens (
     IdVila INT,
 
     Nome VARCHAR(100) NOT NULL,
-    Idade_Clasico INT,
-    Idade_Shippuden INT,
+    Sobrenome VARCHAR(100),
+    IdadeClasico INT,
+    IdadeShippuden INT,
 
     Sexo VARCHAR(10) NOT NULL
         CHECK (Sexo IN ('Masculino', 'Feminino')),
 
     DataNascimento DATE,
-    Altura DECIMAL(5,2),
+    AlturaClassico DECIMAL(5,2),
+    AlturaShippuden DECIMAL(5,2),
     CorCabelo VARCHAR(50),
     CorOlhos VARCHAR(50),
     CorPele VARCHAR(50),
+    DescricaoRoupaClassico VARCHAR(200),
+    DescricaoRoupaShippuden VARCHAR(200),
 
-    MissoesCompletas INT
-        CHECK (MissoesCompletas >= 0 AND MissoesCompletas < 10000),
+    MissoesCompletas INT,
 
     Descricao VARCHAR(250),
+    HistoriaPersonagem TEXT,
 
     Estado VARCHAR(10) NOT NULL
         CHECK (Estado IN ('Vivo', 'Morto')),
 
-    CONSTRAINT fk_personagem_tipo
-        FOREIGN KEY (IdTipoPersonagem)
+    FOREIGN KEY (IdTipoPersonagem)
         REFERENCES TipoPersonagens (IdTipoPersonagem),
 
-    CONSTRAINT fk_personagem_cla
-        FOREIGN KEY (IdCla)
+    FOREIGN KEY (IdCla)
         REFERENCES Clas (IdCla),
 
-    CONSTRAINT fk_personagem_arco_aparicao
-        FOREIGN KEY (IdArcoAparicao)
+    FOREIGN KEY (IdArcoAparicao)
         REFERENCES Arcos (IdArco),
 
-    CONSTRAINT fk_personagem_arco_morte
-        FOREIGN KEY (IdArcoMorte)
+    FOREIGN KEY (IdArcoMorte)
         REFERENCES Arcos (IdArco),
 
-    CONSTRAINT fk_personagem_ocupacao_classico
-        FOREIGN KEY (IdOcupacaoClassico)
+    FOREIGN KEY (IdOcupacaoClassico)
         REFERENCES Ocupacoes (IdOcupacao),
 
-    CONSTRAINT fk_personagem_ocupacao_shippuden
-        FOREIGN KEY (IdOcupacaoShippuden)
+    FOREIGN KEY (IdOcupacaoShippuden)
         REFERENCES Ocupacoes (IdOcupacao),
 
-    CONSTRAINT fk_personagem_vila
-        FOREIGN KEY (IdVila)
+    FOREIGN KEY (IdVila)
         REFERENCES Vilas (IdVila)
 )
 ''')
 
 cursor.execute('''
 CREATE TABLE Jutsus (
-    IdJutsu INT AUTO_INCREMENT PRIMARY KEY,
+    IdJutsu INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     IdElemento INT,
     IdTipoJutsu INT NOT NULL,
 
     Nome VARCHAR(100) NOT NULL,
     Descricao VARCHAR(120),
 
-    Rank VARCHAR(2) NOT NULL
+    Rank VARCHAR(2)
         CHECK (Rank IN ('S','A','B','C','D')),
 
-    CONSTRAINT fk_jutsu_elemento
-        FOREIGN KEY (IdElemento)
+    FOREIGN KEY (IdElemento)
         REFERENCES Elementos (IdElemento),
 
-    CONSTRAINT fk_jutsu_tipo
-        FOREIGN KEY (IdTipoJutsu)
+    FOREIGN KEY (IdTipoJutsu)
         REFERENCES TiposJutsu (IdTipoJutsu)
 )
 ''')
@@ -181,13 +170,13 @@ CREATE TABLE PersonagensJutsus (
     IdJutsu INT,
     PRIMARY KEY (IdPersonagem, IdJutsu),
 
-    CONSTRAINT fk_pj_personagem
-        FOREIGN KEY (IdPersonagem)
-        REFERENCES Personagens (IdPersonagem),
+    FOREIGN KEY (IdPersonagem)
+        REFERENCES Personagens (IdPersonagem)
+        ON DELETE CASCADE,
 
-    CONSTRAINT fk_pj_jutsu
-        FOREIGN KEY (IdJutsu)
+    FOREIGN KEY (IdJutsu)
         REFERENCES Jutsus (IdJutsu)
+        ON DELETE CASCADE
 )
 ''')
 
@@ -197,14 +186,83 @@ CREATE TABLE PersonagensElementos (
     IdElemento INT,
     PRIMARY KEY (IdPersonagem, IdElemento),
 
-    CONSTRAINT fk_pe_personagem
-        FOREIGN KEY (IdPersonagem)
-        REFERENCES Personagens (IdPersonagem),
+    FOREIGN KEY (IdPersonagem)
+        REFERENCES Personagens (IdPersonagem)
+        ON DELETE CASCADE,
 
-    CONSTRAINT fk_pe_elemento
-        FOREIGN KEY (IdElemento)
+    FOREIGN KEY (IdElemento)
         REFERENCES Elementos (IdElemento)
+        ON DELETE CASCADE
 )
+''')
+
+cursor.execute('''
+CREATE TABLE Habilidades (
+    IdHabilidade INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    Descricao VARCHAR(150)
+);
+''')
+
+cursor.execute('''
+CREATE TABLE PersonagensHabilidades (
+    IdPersonagem INT,
+    IdHabilidade INT,
+
+    PRIMARY KEY (IdPersonagem, IdHabilidade),
+
+    FOREIGN KEY (IdPersonagem)
+        REFERENCES Personagens (IdPersonagem)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (IdHabilidade)
+        REFERENCES Habilidades (IdHabilidade)
+        ON DELETE CASCADE
+);
+''')
+
+cursor.execute('''
+CREATE TABLE Databooks (
+    IdDatabook INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    Edicao INT NOT NULL CHECK (Edicao >= 1 AND Edicao <= 4) UNIQUE,
+    Descricao VARCHAR(100)
+);
+''')
+
+cursor.execute('''
+CREATE TABLE PersonagensAtributosDatabook (
+    IdPersonagem INT,
+    IdDatabook INT,
+
+    Ninjutsu DECIMAL(2,1) NOT NULL CHECK (Ninjutsu >= 0 AND Ninjutsu <= 5),
+    Taijutsu DECIMAL(2,1) NOT NULL CHECK (Taijutsu >= 0 AND Taijutsu <= 5),
+    Genjutsu DECIMAL(2,1) NOT NULL CHECK (Genjutsu >= 0 AND Genjutsu <= 5),
+    Inteligencia DECIMAL(2,1) NOT NULL CHECK (Inteligencia >= 0 AND Inteligencia <= 5),
+    Forca DECIMAL(2,1) NOT NULL CHECK (Forca >= 0 AND Forca <= 5),
+    Agilidade DECIMAL(2,1) NOT NULL CHECK (Agilidade >= 0 AND Agilidade <= 5),
+    Estamina DECIMAL(2,1) NOT NULL CHECK (Estamina >= 0 AND Estamina <= 5),
+    SelosManuais DECIMAL(2,1) NOT NULL CHECK (SelosManuais >= 0 AND SelosManuais <= 5),
+        Total DECIMAL(4,1) GENERATED ALWAYS AS (
+        Ninjutsu +
+        Taijutsu +
+        Genjutsu +
+        Inteligencia +
+        Forca +
+        Agilidade +
+        Estamina +
+        SelosManuais
+    ) STORED,
+
+    PRIMARY KEY (IdPersonagem, IdDatabook),
+
+    FOREIGN KEY (IdPersonagem)
+        REFERENCES Personagens (IdPersonagem)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (IdDatabook)
+        REFERENCES Databooks (IdDatabook)
+        ON DELETE CASCADE
+);
 ''')
 
 conn.commit()

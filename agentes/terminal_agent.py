@@ -1,8 +1,9 @@
 import os
 import json
+import psycopg2
+from psycopg2 import OperationalError
 from dotenv import load_dotenv
 from openai import OpenAI
-import mysql.connector
 
 load_dotenv()
 
@@ -11,7 +12,7 @@ with open("./Protocolos/protocolo.json", "r", encoding="utf-8") as f:
 
 OPENAI_API_KEY=os.getenv("OPEN_API_KEY")
 
-conn = mysql.connector.connect(
+conn = psycopg2.connect(
     host=os.getenv("host"),
     user=os.getenv("user"),
     port = os.getenv("port"),
@@ -20,13 +21,23 @@ conn = mysql.connector.connect(
 )
 
 cursor = conn.cursor()
-cursor.execute('SHOW TABLES')
+cursor.execute('''
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
+AND table_type = 'BASE TABLE';
+''')
 tabelas = cursor.fetchall()
 
 colunas = {}
 
 for tabela in tabelas :
-    cursor.execute(f"DESCRIBE {tabela[0]};")
+    cursor.execute(f"""
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_name = %s
+    AND table_schema = 'public';
+    """, (tabela[0],))
     colunas_tabelas = cursor.fetchall()
     colunas[tabela[0]] = [coluna[0] for coluna in colunas_tabelas]
 
@@ -74,8 +85,9 @@ response = client.chat.completions.create(
 
 query_gerada = response.choices[0].message.content
 query_gerada = query_gerada.replace("```sql","").replace("```","")
+query_gerada = query_gerada.strip().rstrip(";")
 
-print(query_gerada)
+# print(query_gerada)
 
 FORBIDDEN = protocol["forbidden_operations"]
 
@@ -84,8 +96,6 @@ def validate_query(query: str) -> bool:
     if not q.startswith("SELECT"):
         return False
     if any(word in q for word in FORBIDDEN):
-        return False
-    if ";" in q:
         return False
     if "--" in q or "/*" in q:
         return False
@@ -97,7 +107,7 @@ if not validate_query(query_gerada):
 
 try :
 
-    conn = mysql.connector.connect(
+    conn = psycopg2.connect(
         host=str(os.getenv("host")),
         user=str(os.getenv("user")),
         port = int(os.getenv("port")),
@@ -140,11 +150,11 @@ else:
     natural_response = client.chat.completions.create(
         model="gpt-4.1",
         messages=[
-            {"role": "system", "content": "Você é o Konoha Oracle. Responda de forma seria e objetiva"},
+            {"role": "system", "content": "Você é o Konoha Oracle. Responda de forma objetiva com base nos dados fornecidos"},
             {"role": "user", "content": natural_prompt}
         ],
         temperature=0.2,
-        max_tokens=300
+        max_tokens=350
     )
 
     resposta_final = natural_response.choices[0].message.content

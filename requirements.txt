@@ -2,4 +2,4 @@ pandas
 openai
 dotenv
 streamlit
-mysql-connector-python
+psycopg2-binary

@@ -1,35 +1,32 @@
 from DataBase.databaseConfig import cursor, conn
 
-#Permitir NULL no Rank
-cursor.execute("""
-ALTER TABLE Jutsus
-MODIFY Rank VARCHAR(2) NULL
-""")
-
-#Atualizar alturas (Shippuden)
-
+#Atualizar alturas 
 cursor.execute("""
 UPDATE Personagens
-SET Altura = 1.66
-WHERE Nome = 'Naruto Uzumaki'
+SET AlturaClassico = 1.45,
+    AlturaShippuden = 1.66
+WHERE Nome = 'Naruto';
 """)
 
 cursor.execute("""
 UPDATE Personagens
-SET Altura = 1.68
-WHERE Nome = 'Sasuke Uchiha'
+SET AlturaClassico = 1.50,
+    AlturaShippuden = 1.68
+WHERE Nome = 'Sasuke'
 """)
 
 cursor.execute("""
 UPDATE Personagens
-SET Altura = 1.61
-WHERE Nome = 'Sakura Haruno'
+SET AlturaClassico = 1.48,
+    AlturaShippuden = 1.61
+WHERE Nome = 'Sakura'
 """)
 
 cursor.execute("""
 UPDATE Personagens
-SET Altura = 1.81
-WHERE Nome = 'Kakashi Hatake'
+SET AlturaClassico = 1.81,
+    AlturaShippuden = 1.81
+WHERE Nome = 'Kakashi'
 """)
 
 #Remover rank do Sharingan
