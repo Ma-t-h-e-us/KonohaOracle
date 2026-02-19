@@ -77,7 +77,7 @@ response = client.chat.completions.create(
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt}
     ],
-    max_tokens=200,
+    max_tokens=250,
     temperature=0
 )
 

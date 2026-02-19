@@ -11,7 +11,10 @@
       "Aprenda com o contexto da conversa.",
       "Mantenha coerência com o histórico.",
       "Nunca invente dados que não estejam no banco.",
-      "Os personagens as vezes sao referenciados pelo nome parcial"
+      "Informacoes as vezes sao referenciados de forma parcial",
+      "Responda apenas com base em dados que possam ser obtidos diretamente das tabelas disponíveis.",
+      "Se a estrutura do banco não permitir responder à pergunta, retorne que a informação não está registrada.",
+      "Nunca utilize conhecimento externo ao banco para gerar respostas nem mesmo consultas SQL"
     ]
   },
 
@@ -25,7 +28,9 @@
       "Elementos": "Tabela que armazena os elementos de natureza (Fogo, Água, Vento, Terra, Raio, etc).",
       "Jutsus": "Tabela que armazena técnicas e jutsus apresentados na obra.",
       "PersonagensJutsus": "Tabela intermediária entre Jutsus e Personagens.",
-      "Arcos": "Tabela que armazena os arcos da obra e uma breve descrição dos acontecimentos."
+      "Arcos": "Tabela que armazena os arcos da obra e uma breve descrição dos acontecimentos.",
+      "Databooks": "Tabela que armazena as edições oficiais dos databooks da obra Naruto.",
+      "PersonagensAtributosDatabook": "Tabela intermediária entre Personagens e Databooks, armazenando os atributos como ninjutsu taijutsu, forca, genjutsu, agilidade, inteligencia, estamina e selos manuais numa escala de 1 a 5 avaliados em cada edição."
     }
   },
 
@@ -56,7 +61,19 @@
     "allow_group_by": true,
     "allow_order_by": true,
     "allow_having": true,
-    "require_select_start": true
+    "require_select_start": true,
+    "sql_generation_rules": [
+      "O banco de dados é PostgreSQL.",
+      "Todas as comparações de texto devem ser case-insensitive.",
+      "Use ILIKE ao invés de LIKE.",
+      "Quando usar igualdade textual, utilize LOWER(coluna) = LOWER(valor).",
+      "Nunca gere LIKE case-sensitive.",
+      "Evite OR dentro de JOINs quando possível.",
+      "Considere que os valores do banco podem conter iniciais maiúsculas."
+    ],
+    "validate_schema_relevance": true,
+    "only_generate_queries_supported_by_schema": true,
+    "if_no_structural_path_return_empty_query": true
   },
 
   "security_constraints": {
