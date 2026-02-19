@@ -1,4 +1,6 @@
-<p align="center"> <img src="https://upload.wikimedia.org/wikipedia/commons/9/94/Naruto_logo.svg" width="400"/> </p>
+<p align="center">
+  <img src="assets\images\naruto_logo.png" width="400"/>
+</p>
 
 🔮 Sistema inteligente de informações sobre Naruto, integrado a PostgreSQL e agente de IA para geração dinâmica de queries.
 
