@@ -16,8 +16,8 @@ BEGIN
         SELECT NEW.IdPersonagem, IdJutsu
         FROM Jutsus
         WHERE Nome IN (
-            'Tecnica de Clonagem',
-            'Tecnica de Transformacao',
+            'Clonagem',
+            'Transformacao',
             'Tecnica de Substituicao'
         )
         ON CONFLICT DO NOTHING;

@@ -87,7 +87,7 @@ query_gerada = response.choices[0].message.content
 query_gerada = query_gerada.replace("```sql","").replace("```","")
 query_gerada = query_gerada.strip().rstrip(";")
 
-# print(query_gerada)
+print(query_gerada)
 
 FORBIDDEN = protocol["forbidden_operations"]
 

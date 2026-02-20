@@ -23,14 +23,19 @@
       "Personagens": "Tabela que armazena personagens da obra Naruto.",
       "TipoPersonagens": "Tabela que define a relevância do personagem na obra (Protagonista, Antagonista, Secundário, Terciário).",
       "Clans": "Tabela que armazena os clãs da obra, onde normalmente cada personagem tem um cla",
-      "Ocupacoes": "Tabela que armazena o cargo ou função do ninja ou personagem.",
+      "Ocupacoes": "Tabela que armazena o cargo, atuacao ou função do ninja ou personagem.",
       "PersonagensElementos": "Tabela intermediária entre Personagens e Elementos.",
       "Elementos": "Tabela que armazena os elementos de natureza (Fogo, Água, Vento, Terra, Raio, etc).",
+      "TiposElementos" : "Tabela que armazena os tipos de elementos (Elemento Basico, Kekkei Genkai, Kekkei Touta)",
       "Jutsus": "Tabela que armazena técnicas e jutsus apresentados na obra.",
+      "TiposJutsu" : "Tabela que armazena os tipos dos jutsus (Taijutsu, Genjutsu,Ninjutsu,Fuuinjutsu e etc",
       "PersonagensJutsus": "Tabela intermediária entre Jutsus e Personagens.",
       "Arcos": "Tabela que armazena os arcos da obra e uma breve descrição dos acontecimentos.",
       "Databooks": "Tabela que armazena as edições oficiais dos databooks da obra Naruto.",
-      "PersonagensAtributosDatabook": "Tabela intermediária entre Personagens e Databooks, armazenando os atributos como ninjutsu taijutsu, forca, genjutsu, agilidade, inteligencia, estamina e selos manuais numa escala de 1 a 5 avaliados em cada edição."
+      "PersonagensAtributosDatabook": "Tabela intermediária entre Personagens e Databooks, armazenando os atributos como ninjutsu taijutsu, forca, genjutsu, agilidade, inteligencia, estamina e selos manuais numa escala de 1 a 5 avaliados em cada edição.",
+      "Habilidades" : "Tabela que armazena atributos físicos, mentais e especiais que um personagem pode ter",
+      "PersonagensHabilidades" : "Tabela intermediária entre personagens e habilidades",
+      "Vilas" : "Tabela que armazena as vilas ocultas e paises da obra"
     }
   },
 
